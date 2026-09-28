@@ -1,0 +1,23 @@
+IMÁGENES DEL PORTAFOLIO
+=======================
+
+Guarda aquí tus imágenes con EXACTAMENTE estos nombres:
+
+  foto.jpg         Tu foto (sección "Quién soy").
+                   Ideal: vertical (proporción 4:5), fondo limpio, buena luz,
+                   cara centrada, máximo ~300 KB.
+                   Si no existe, la página muestra tus iniciales "AR".
+
+  proyecto-1.png   Captura del proyecto 1  (proporción 16:9, ej. 1280 x 720)
+  proyecto-2.png   Captura del proyecto 2
+  proyecto-3.png   Captura del proyecto 3
+  proyecto-4.png   Captura del proyecto 4
+                   Si no existe, se muestra un dibujo técnico en su lugar.
+
+Puedes usar .jpg o .png. Si tu archivo tiene otra extensión (.jpg, .webp),
+cambia el nombre en index.html (busca "proyecto-1.png").
+
+Consejo: comprime las imágenes en https://squoosh.app antes de subirlas,
+para que la página cargue rápido.
+
+Puedes borrar este archivo cuando termines.

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Andrey Ricaurte | Desarrollador de software</title>
+  <meta name="description" content="Portafolio de Andrey Julian Ricaurte Duran, desarrollador de software junior (backend y frontend) en Bucaramanga, Colombia." />
+  <meta name="theme-color" content="#0a2058" />
+
+  <!-- ✏️ EDITAR (opcional): título y descripción que se ven al compartir el enlace en redes sociales -->
+  <meta property="og:title" content="Andrey Ricaurte | Desarrollador de software" />
+  <meta property="og:description" content="Desarrollador de software junior. Backend, frontend, bases de datos y arquitectura." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Recuerda el tema elegido antes de pintar la página (evita parpadeos) -->
+  <script>
+    document.documentElement.classList.add('js');
+    try { var th = localStorage.getItem('theme'); if (th) document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+  </script>
+</head>
+<body>
+  <noscript><p style="padding:1rem">Activa JavaScript para ver este portafolio.</p></noscript>
+
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ============================ MENÚ ============================ -->
+  <header class="nav">
+    <div class="wrap nav__in">
+      <a class="brand" href="#hero" aria-label="Andrey Ricaurte, inicio">
+        <span class="brand__mark" aria-hidden="true">AR</span>
+        <span class="brand__name">Andrey Ricaurte</span>
+      </a>
+
+      <nav class="nav__links" data-i18n-attr="aria-label:nav_label">
+        <a href="#about" data-i18n="nav_about"></a>
+        <a href="#offer" data-i18n="nav_offer"></a>
+        <a href="#skills" data-i18n="nav_skills"></a>
+        <a href="#projects" data-i18n="nav_projects"></a>
+        <a href="#path" data-i18n="nav_path"></a>
+        <a href="#contact" data-i18n="nav_contact"></a>
+      </nav>
+
+      <div class="nav__tools">
+        <!-- BOTÓN DE IDIOMA: español / inglés -->
+        <div class="seg" role="group" data-i18n-attr="aria-label:lang_label">
+          <button type="button" data-lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+
+        <button type="button" class="icon-btn" id="themeBtn" data-i18n-attr="aria-label:theme_label">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.2"/>
+            <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>
+          </svg>
+        </button>
+
+        <button type="button" class="icon-btn burger" id="burger" aria-expanded="false" aria-controls="mobileNav" data-i18n-attr="aria-label:menu_label">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <nav class="mnav" id="mobileNav" hidden data-i18n-attr="aria-label:nav_label">
+      <a href="#about" data-i18n="nav_about"></a>
+        <a href="#offer" data-i18n="nav_offer"></a>
+      <a href="#skills" data-i18n="nav_skills"></a>
+      <a href="#projects" data-i18n="nav_projects"></a>
+      <a href="#path" data-i18n="nav_path"></a>
+      <a href="#contact" data-i18n="nav_contact"></a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================ INICIO ============================ -->
+    <section class="hero" id="hero">
+      <!-- Cruz con coordenadas que sigue el cursor (solo en computador; se puede borrar este bloque sin problema) -->
+      <div class="xhair" id="xhair" aria-hidden="true"><i class="xh-v"></i><i class="xh-h"></i><span class="xh-t" id="xhT"></span></div>
+
+      <div class="wrap hero__grid">
+
+        <div class="hero__text">
+          <p class="status"><span class="status__dot" aria-hidden="true"></span><span data-i18n="hero_status"></span></p>
+
+          <div class="namewrap">
+            <!-- ✏️ EDITAR: nombre corto que se ve en grande (nombre y primer apellido) -->
+            <h1 class="hero__name"><span class="ln" style="--l:0"><span>Andrey</span></span><span class="ln" style="--l:1"><span>Ricaurte</span></span></h1>
+            <div class="dim" aria-hidden="true"><span data-i18n="hero_dim"></span></div>
+          </div>
+
+          <p class="hero__role" data-i18n="hero_role"></p>
+          <p class="hero__lead" data-i18n="hero_lead"></p>
+
+          <div class="hero__cta">
+            <a class="btn btn--signal" href="#projects" data-i18n="hero_cta_projects"></a>
+            <!-- ✏️ EDITAR: pon tu CV en assets/cv/ con exactamente este nombre (CV-Andrey-Ricaurte.pdf) -->
+            <a class="btn" href="assets/cv/CV-Andrey-Ricaurte.pdf" download data-i18n="hero_cta_cv"></a>
+          </div>
+        </div>
+
+        <!-- DIAGRAMA DE ARQUITECTURA (se dibuja al cargar; pasa el cursor por los bloques) -->
+        <figure class="fig">
+          <svg id="arch" viewBox="0 0 640 420" role="group" data-i18n-attr="aria-label:fig_label">
+
+            <!-- marcas de esquina del "plano" -->
+            <g class="fig__corners" aria-hidden="true">
+              <path d="M2 22V2h20M618 2h20v20M638 398v20h-20M22 418H2v-20"/>
+            </g>
+
+            <!-- conexiones (se dibujan solas) -->
+            <g aria-hidden="true">
+              <path class="edge" pathLength="1" style="--d:.9s"  d="M192 78H212V198H232"/>
+              <path class="edge" pathLength="1" style="--d:1.1s" d="M192 342H212V222H232"/>
+              <path class="edge" pathLength="1" style="--d:1.5s" d="M408 198H428V78H448"/>
+              <path class="edge" pathLength="1" style="--d:1.7s" d="M408 222H428V342H448"/>
+
+              <path class="arrow" style="--d:1.6s" d="M225 194.5L232 198L225 201.5Z"/>
+              <path class="arrow" style="--d:1.8s" d="M225 218.5L232 222L225 225.5Z"/>
+              <path class="arrow" style="--d:2.2s" d="M441 74.5L448 78L441 81.5Z"/>
+              <path class="arrow" style="--d:2.4s" d="M441 338.5L448 342L441 345.5Z"/>
+            </g>
+
+            <!-- datos viajando por las conexiones -->
+            <g aria-hidden="true">
+              <circle class="packet" r="4" visibility="hidden"><set attributeName="visibility" to="visible" begin="2.8s" fill="freeze"/><animateMotion dur="2.4s" begin="2.8s" repeatCount="indefinite" path="M192 78H212V198H232"/></circle>
+              <circle class="packet" r="4" visibility="hidden"><set attributeName="visibility" to="visible" begin="3.6s" fill="freeze"/><animateMotion dur="2.4s" begin="3.6s" repeatCount="indefinite" path="M192 342H212V222H232"/></circle>
+              <circle class="packet" r="4" visibility="hidden"><set attributeName="visibility" to="visible" begin="4.4s" fill="freeze"/><animateMotion dur="2.4s" begin="4.4s" repeatCount="indefinite" path="M408 198H428V78H448"/></circle>
+              <circle class="packet" r="4" visibility="hidden"><set attributeName="visibility" to="visible" begin="5.2s" fill="freeze"/><animateMotion dur="2.4s" begin="5.2s" repeatCount="indefinite" path="M408 222H428V342H448"/></circle>
+            </g>
+
+            <!-- bloques -->
+            <g class="node" tabindex="0" role="button" data-node="client" style="--d:.15s">
+              <rect x="16" y="40" width="176" height="76" rx="3"/>
+              <rect class="node__bar" x="16" y="40" width="5" height="76"/>
+              <text class="node__t" x="36" y="74" data-i18n="n_client"></text>
+              <text class="node__s" x="36" y="96" data-i18n="n_client_s"></text>
+            </g>
+
+            <g class="node" tabindex="0" role="button" data-node="ext" style="--d:.35s">
+              <rect x="16" y="304" width="176" height="76" rx="3"/>
+              <rect class="node__bar" x="16" y="304" width="5" height="76"/>
+              <text class="node__t" x="36" y="338" data-i18n="n_ext"></text>
+              <text class="node__s" x="36" y="360" data-i18n="n_ext_s"></text>
+            </g>
+
+            <g class="node" tabindex="0" role="button" data-node="api" style="--d:.55s">
+              <rect x="232" y="172" width="176" height="76" rx="3"/>
+              <rect class="node__bar" x="232" y="172" width="5" height="76"/>
+              <text class="node__t" x="252" y="206" data-i18n="n_api"></text>
+              <text class="node__s" x="252" y="228" data-i18n="n_api_s"></text>
+            </g>
+
+            <g class="node" tabindex="0" role="button" data-node="db" style="--d:.75s">
+              <rect x="448" y="40" width="176" height="76" rx="3"/>
+              <rect class="node__bar" x="448" y="40" width="5" height="76"/>
+              <text class="node__t" x="468" y="74" data-i18n="n_db"></text>
+              <text class="node__s" x="468" y="96" data-i18n="n_db_s"></text>
+            </g>
+
+            <g class="node" tabindex="0" role="button" data-node="vision" style="--d:.95s">
+              <rect x="448" y="304" width="176" height="76" rx="3"/>
+              <rect class="node__bar" x="448" y="304" width="5" height="76"/>
+              <text class="node__t" x="468" y="338" data-i18n="n_vision"></text>
+              <text class="node__s" x="468" y="360" data-i18n="n_vision_s"></text>
+            </g>
+          </svg>
+
+          <figcaption class="fig__title" data-i18n="fig_title"></figcaption>
+          <p class="fig__cap" id="figCap" aria-live="polite"></p>
+        </figure>
+      </div>
+
+      <!-- CUADRO DE ROTULACIÓN, como en los planos técnicos -->
+      <div class="wrap">
+        <dl class="titleblock">
+          <div><dt data-i18n="tb_project"></dt><dd data-i18n="tb_project_v"></dd></div>
+          <!-- ✏️ EDITAR: tu nombre completo -->
+          <div><dt data-i18n="tb_author"></dt><dd>Andrey Julian Ricaurte Duran</dd></div>
+          <div><dt data-i18n="tb_place"></dt><dd data-i18n="tb_place_v"></dd></div>
+          <div><dt data-i18n="tb_status"></dt><dd data-i18n="tb_status_v"></dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============================ CINTA DE TECNOLOGÍAS ============================ -->
+    <!-- ✏️ EDITAR (opcional): deja solo lo que realmente usas. Hay DOS listas iguales a propósito
+         (la segunda hace que el movimiento no tenga saltos): si cambias una, cambia la otra. -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <ul class="marquee__list">
+          <li>Python</li>
+          <li>Java</li>
+          <li>SQL</li>
+          <li data-i18n="sk_arch"></li>
+          <li>JavaScript</li>
+          <li data-i18n="sk_rdb"></li>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li data-i18n="sk_vision"></li>
+          <li>Git</li>
+          <li>GitHub</li>
+          <li data-i18n="sk_api"></li>
+        </ul>
+        <ul class="marquee__list">
+          <li>Python</li>
+          <li>Java</li>
+          <li>SQL</li>
+          <li data-i18n="sk_arch"></li>
+          <li>JavaScript</li>
+          <li data-i18n="sk_rdb"></li>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li data-i18n="sk_vision"></li>
+          <li>Git</li>
+          <li>GitHub</li>
+          <li data-i18n="sk_api"></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================ PERFIL ============================ -->
+    <section class="sheet" id="about" aria-labelledby="about-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="about-h" data-i18n="about_title"></h2></div>
+
+        <div class="about">
+          <div class="about__text">
+            <p class="about__lead" data-i18n="about_p1"></p>
+            <p data-i18n="about_p2"></p>
+
+            <dl class="facts">
+              <div><dt data-i18n="f_loc"></dt><dd data-i18n="f_loc_v"></dd></div>
+              <div><dt data-i18n="f_profile"></dt><dd data-i18n="f_profile_v"></dd></div>
+              <div><dt data-i18n="f_spec"></dt><dd data-i18n="f_spec_v"></dd></div>
+              <div><dt data-i18n="f_goal"></dt><dd data-i18n="f_goal_v"></dd></div>
+            </dl>
+          </div>
+
+          <figure class="photo">
+            <div class="photo__frame">
+              <span class="photo__initials" aria-hidden="true">AR</span>
+              <!-- ✏️ EDITAR: guarda tu foto en assets/img/ con el nombre foto.jpg
+                   (mejor vertical, fondo limpio, buena luz, máx. ~300 KB).
+                   Mientras no exista, se muestran tus iniciales "AR". -->
+              <img src="assets/img/IMG_1805.webp" alt="" data-i18n-attr="alt:photo_alt" width="640" height="800" loading="lazy" onerror="this.remove()" />
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SERVICIOS ============================ -->
+    <!-- ✏️ EDITAR (opcional): quita o cambia servicios según lo que realmente ofreces.
+         Los textos están en js/i18n.js (claves s1_..., s2_..., etc.). -->
+    <section class="sheet" id="offer" aria-labelledby="offer-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="offer-h" data-i18n="offer_title"></h2></div>
+        <div>
+          <p class="offer__lead" data-i18n="offer_lead"></p>
+          <ul class="offer">
+          <li class="offer__item">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg>
+            <h3 data-i18n="s1_title"></h3>
+            <p data-i18n="s1_desc"></p>
+          </li>
+          <li class="offer__item">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+            <h3 data-i18n="s2_title"></h3>
+            <p data-i18n="s2_desc"></p>
+          </li>
+          <li class="offer__item">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+            <h3 data-i18n="s3_title"></h3>
+            <p data-i18n="s3_desc"></p>
+          </li>
+          <li class="offer__item">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>
+            <h3 data-i18n="s4_title"></h3>
+            <p data-i18n="s4_desc"></p>
+          </li>
+          <li class="offer__item">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <h3 data-i18n="s5_title"></h3>
+            <p data-i18n="s5_desc"></p>
+          </li>
+          <li class="offer__item">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            <h3 data-i18n="s6_title"></h3>
+            <p data-i18n="s6_desc"></p>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ STACK ============================ -->
+    <section class="sheet" id="skills" aria-labelledby="skills-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="skills-h" data-i18n="skills_title"></h2></div>
+
+        <!-- ✏️ EDITAR: agrega o quita tecnologías dentro de cada <ul class="chips">.
+             Las tecnologías que no cambian de idioma (Python, Java...) se escriben directo.
+             Las que sí cambian usan data-i18n="clave" y su texto está en js/i18n.js -->
+        <div class="layers">
+
+          <div class="layer">
+            <div class="layer__id"><h3 data-i18n="layer_ui"></h3><p data-i18n="layer_ui_n"></p></div>
+            <ul class="chips">
+              <li>HTML</li><li>CSS</li><li>JavaScript</li><li data-i18n="sk_responsive"></li>
+            </ul>
+          </div>
+
+          <div class="layer">
+            <div class="layer__id"><h3 data-i18n="layer_logic"></h3><p data-i18n="layer_logic_n"></p></div>
+            <ul class="chips">
+              <li>Python</li><li>Java</li><li data-i18n="sk_oop"></li><li data-i18n="sk_api"></li>
+            </ul>
+          </div>
+
+          <div class="layer">
+            <div class="layer__id"><h3 data-i18n="layer_data"></h3><p data-i18n="layer_data_n"></p></div>
+            <ul class="chips">
+              <li>SQL</li><li data-i18n="sk_rdb"></li><li data-i18n="sk_model"></li>
+            </ul>
+          </div>
+
+          <div class="layer">
+            <div class="layer__id"><h3 data-i18n="layer_arch"></h3><p data-i18n="layer_arch_n"></p></div>
+            <ul class="chips">
+              <li data-i18n="sk_arch"></li><li data-i18n="sk_access"></li>
+            </ul>
+          </div>
+
+          <div class="layer">
+            <div class="layer__id"><h3 data-i18n="layer_auto"></h3><p data-i18n="layer_auto_n"></p></div>
+            <ul class="chips">
+              <li data-i18n="sk_auto"></li><li data-i18n="sk_vision"></li><li data-i18n="sk_api"></li>
+            </ul>
+          </div>
+
+          <div class="layer">
+            <div class="layer__id"><h3 data-i18n="layer_tools"></h3><p data-i18n="layer_tools_n"></p></div>
+            <!-- ✏️ EDITAR: son ejemplos comunes; deja solo las que de verdad usas -->
+            <ul class="chips">
+              <li>Git</li><li>GitHub</li><li>VS Code</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PROYECTOS ============================ -->
+    <section class="sheet" id="projects" aria-labelledby="projects-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="projects-h" data-i18n="projects_title"></h2></div>
+
+        <div>
+          <div class="filters" role="group" data-i18n-attr="aria-label:filters_label">
+            <button type="button" data-filter="all" aria-pressed="true" data-i18n="f_all"></button>
+            <button type="button" data-filter="web" aria-pressed="false" data-i18n="f_web"></button>
+            <button type="button" data-filter="desktop" aria-pressed="false" data-i18n="f_desktop"></button>
+            <button type="button" data-filter="auto" aria-pressed="false" data-i18n="f_auto"></button>
+            <button type="button" data-filter="vision" aria-pressed="false" data-i18n="f_vision"></button>
+          </div>
+
+          <div class="projects">
+
+            <!-- ✏️ EDITAR (PROYECTO 1)
+                 · data-cat: web, desktop, auto o vision (puedes poner varios separados por espacio)
+                 · Textos: claves p1_title y p1_desc en js/i18n.js
+                 · Captura: guarda una imagen en assets/img/proyecto-1.png (16:9 se ve mejor)
+                 · Enlaces: cambia TU-USUARIO/TU-REPO. Si no tienes demo, borra el enlace "Demo".
+                 · ¿Más proyectos? Copia todo este bloque <article>…</article>, cambia p1 por p5, etc. -->
+            <article class="proj" data-cat="desktop">
+              <div class="proj__thumb">
+                <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="40" y="40" width="40" height="30" rx="3"/><path d="M48 40v-8a12 12 0 0 1 24 0v8"/><circle cx="60" cy="53" r="4"/><path d="M60 57v6"/>
+                </svg>
+                <img class="proj__shot" src="assets/img/proyecto-1.png" alt="" loading="lazy" onerror="this.remove()" />
+              </div>
+              <div class="proj__body">
+                <h3 data-i18n="p1_title"></h3>
+                <p data-i18n="p1_desc"></p>
+                <dl class="proj__facts">
+                  <div><dt data-i18n="lbl_role"></dt><dd data-i18n="p1_role"></dd></div>
+                  <div><dt data-i18n="lbl_result"></dt><dd data-i18n="p1_result"></dd></div>
+                </dl>
+                <ul class="tags"><li>Java</li><li>SQL</li></ul>
+                <div class="proj__links">
+                  <a href="https://github.com/TU-USUARIO/TU-REPO-1" target="_blank" rel="noopener noreferrer" data-i18n="link_code"></a>
+                  <a href="https://TU-DEMO-1.com" target="_blank" rel="noopener noreferrer" data-i18n="link_demo"></a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ✏️ EDITAR (PROYECTO 2) — captura: assets/img/proyecto-2.png -->
+            <article class="proj" data-cat="vision">
+              <div class="proj__thumb">
+                <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 30v-8h8M98 30v-8h-8M22 60v8h8M98 60v8h-8"/><path d="M34 45c8-11 44-11 52 0-8 11-44 11-52 0z"/><circle cx="60" cy="45" r="7"/>
+                </svg>
+                <img class="proj__shot" src="assets/img/proyecto-2.png" alt="" loading="lazy" onerror="this.remove()" />
+              </div>
+              <div class="proj__body">
+                <h3 data-i18n="p2_title"></h3>
+                <p data-i18n="p2_desc"></p>
+                <dl class="proj__facts">
+                  <div><dt data-i18n="lbl_role"></dt><dd data-i18n="p2_role"></dd></div>
+                  <div><dt data-i18n="lbl_result"></dt><dd data-i18n="p2_result"></dd></div>
+                </dl>
+                <ul class="tags"><li>Python</li><li data-i18n="sk_vision"></li></ul>
+                <div class="proj__links">
+                  <a href="https://github.com/TU-USUARIO/TU-REPO-2" target="_blank" rel="noopener noreferrer" data-i18n="link_code"></a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ✏️ EDITAR (PROYECTO 3) — captura: assets/img/proyecto-3.png -->
+            <article class="proj" data-cat="auto">
+              <div class="proj__thumb">
+                <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="16" y="30" width="30" height="30" rx="2"/><rect x="74" y="30" width="30" height="30" rx="2"/><path d="M46 39h28M68 34l6 5-6 5M74 51H46M52 46l-6 5 6 5"/>
+                </svg>
+                <img class="proj__shot" src="assets/img/proyecto-3.png" alt="" loading="lazy" onerror="this.remove()" />
+              </div>
+              <div class="proj__body">
+                <h3 data-i18n="p3_title"></h3>
+                <p data-i18n="p3_desc"></p>
+                <dl class="proj__facts">
+                  <div><dt data-i18n="lbl_role"></dt><dd data-i18n="p3_role"></dd></div>
+                  <div><dt data-i18n="lbl_result"></dt><dd data-i18n="p3_result"></dd></div>
+                </dl>
+                <ul class="tags"><li>Python</li><li>REST</li><li>APIs</li></ul>
+                <div class="proj__links">
+                  <a href="https://github.com/TU-USUARIO/TU-REPO-3" target="_blank" rel="noopener noreferrer" data-i18n="link_code"></a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ✏️ EDITAR (PROYECTO 4) — captura: assets/img/proyecto-4.png -->
+            <article class="proj" data-cat="web">
+              <div class="proj__thumb">
+                <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="20" y="20" width="80" height="52" rx="3"/><path d="M20 32h80M30 44h30M30 52h44M30 60h22"/>
+                </svg>
+                <img class="proj__shot" src="assets/img/proyecto-4.png" alt="" loading="lazy" onerror="this.remove()" />
+              </div>
+              <div class="proj__body">
+                <h3 data-i18n="p4_title"></h3>
+                <p data-i18n="p4_desc"></p>
+                <dl class="proj__facts">
+                  <div><dt data-i18n="lbl_role"></dt><dd data-i18n="p4_role"></dd></div>
+                  <div><dt data-i18n="lbl_result"></dt><dd data-i18n="p4_result"></dd></div>
+                </dl>
+                <ul class="tags"><li>JavaScript</li><li>Python</li><li>SQL</li></ul>
+                <div class="proj__links">
+                  <a href="https://github.com/TU-USUARIO/TU-REPO-4" target="_blank" rel="noopener noreferrer" data-i18n="link_code"></a>
+                  <a href="https://TU-DEMO-4.com" target="_blank" rel="noopener noreferrer" data-i18n="link_demo"></a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TRAYECTORIA ============================ -->
+    <section class="sheet" id="path" aria-labelledby="path-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="path-h" data-i18n="path_title"></h2></div>
+
+        <!-- ✏️ EDITAR: cada <li class="tl__item"> es una fila (estudio, experiencia, curso).
+             Los textos están en js/i18n.js (claves t1_..., t2_..., t3_...).
+             Para quitar una fila, borra su <li>…</li>. -->
+        <div>
+        <ol class="tl">
+          <li class="tl__item">
+            <p class="tl__year" data-i18n="t1_year"></p>
+            <div><h3 data-i18n="t1_title"></h3><p class="tl__place" data-i18n="t1_place"></p><p data-i18n="t1_desc"></p></div>
+          </li>
+          <li class="tl__item">
+            <p class="tl__year" data-i18n="t2_year"></p>
+            <div><h3 data-i18n="t2_title"></h3><p class="tl__place" data-i18n="t2_place"></p><p data-i18n="t2_desc"></p></div>
+          </li>
+          <li class="tl__item">
+            <p class="tl__year" data-i18n="t3_year"></p>
+            <div><h3 data-i18n="t3_title"></h3><p class="tl__place" data-i18n="t3_place"></p><p data-i18n="t3_desc"></p></div>
+          </li>
+        </ol>
+
+        <!-- ✏️ EDITAR: tus certificados y cursos (textos en js/i18n.js, claves cert1_..., cert2_...).
+             Para quitar uno, borra su <li>. -->
+        <div class="certs">
+          <h3 data-i18n="cert_title"></h3>
+          <ul>
+            <li><strong data-i18n="cert1_name"></strong><span data-i18n="cert1_place"></span></li>
+            <li><strong data-i18n="cert2_name"></strong><span data-i18n="cert2_place"></span></li>
+            <li><strong data-i18n="cert3_name"></strong><span data-i18n="cert3_place"></span></li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ OPCIONAL · RECOMENDACIONES
+         Si tienes una recomendación de un profesor, jefe o compañero, activa esta sección:
+         1) Borra la línea de apertura del comentario y la de cierre (las que tienen los signos de menor/mayor con guiones).
+         2) Agrega el enlace <a href="#recs" data-i18n="test_title"></a> al menú si quieres.
+         3) Cambia los textos en js/i18n.js (claves test1_quote, test1_name, test1_role).
+         No la actives con textos de relleno: solo úsala con recomendaciones reales.
+
+    <section class="sheet" id="recs" aria-labelledby="recs-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="recs-h" data-i18n="test_title"></h2></div>
+        <figure class="quote">
+          <blockquote data-i18n="test1_quote"></blockquote>
+          <figcaption><strong data-i18n="test1_name"></strong> <span data-i18n="test1_role"></span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    -->
+
+    <!-- ============================ CONTACTO ============================ -->
+    <section class="sheet" id="contact" aria-labelledby="contact-h">
+      <div class="wrap sheet__grid">
+        <div class="sheet__head"><h2 id="contact-h" data-i18n="contact_title"></h2></div>
+
+        <div>
+          <p class="contact__lead" data-i18n="contact_lead"></p>
+          <p class="contact__text" data-i18n="contact_text"></p>
+
+          <ul class="contact__list">
+            <li>
+              <span class="contact__k" data-i18n="c_mail"></span>
+              <!-- ✏️ EDITAR: tu correo (cámbialo en las 3 partes: mailto, texto y data-copy) -->
+              <a class="contact__v" href="mailto:tu-correo@ejemplo.com">tu-correo@ejemplo.com</a>
+              <button type="button" class="btn btn--sm" id="copyBtn" data-copy="tu-correo@ejemplo.com" data-i18n="c_copy"></button>
+            </li>
+            <li>
+              <span class="contact__k" data-i18n="c_github"></span>
+              <!-- ✏️ EDITAR: tu usuario de GitHub -->
+              <a class="contact__v" href="https://github.com/TU-USUARIO" target="_blank" rel="noopener noreferrer">github.com/TU-USUARIO</a>
+            </li>
+            <li>
+              <span class="contact__k" data-i18n="c_linkedin"></span>
+              <!-- ✏️ EDITAR: tu perfil de LinkedIn (si no tienes, borra todo este <li>) -->
+              <a class="contact__v" href="https://www.linkedin.com/in/TU-USUARIO" target="_blank" rel="noopener noreferrer">linkedin.com/in/TU-USUARIO</a>
+            </li>
+            <li>
+              <span class="contact__k" data-i18n="c_whatsapp"></span>
+              <!-- ✏️ EDITAR: tu número con código de país y sin signos ni espacios (Colombia = 57).
+                   Cambia el número en el enlace y en el texto. Si no quieres WhatsApp, borra este <li>. -->
+              <a class="contact__v" href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer">+57 300 000 0000</a>
+            </li>
+            <li>
+              <span class="contact__k" data-i18n="c_cv"></span>
+              <a class="contact__v" href="assets/cv/CV-Andrey-Ricaurte.pdf" download data-i18n="c_cv_v"></a>
+            </li>
+          </ul>
+
+          <!-- Formulario: abre el correo del visitante con el mensaje listo. Usa el correo de arriba (data-copy). -->
+          <form class="cform" id="contactForm">
+            <h3 data-i18n="form_title"></h3>
+            <label for="cf-name"><span data-i18n="form_name"></span>
+              <input id="cf-name" name="name" type="text" autocomplete="name" required />
+            </label>
+            <label for="cf-msg"><span data-i18n="form_msg"></span>
+              <textarea id="cf-msg" name="message" required></textarea>
+            </label>
+            <div class="cform__row">
+              <button type="submit" class="btn btn--signal" data-i18n="form_send"></button>
+              <p class="cform__hint" data-i18n="form_hint"></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================ PIE ============================ -->
+  <footer class="foot">
+    <div class="wrap foot__in">
+      <p>© <span id="year">2026</span> Andrey Julian Ricaurte Duran. <span data-i18n="foot_rights"></span></p>
+      <a href="#hero" data-i18n="foot_top"></a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

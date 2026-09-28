@@ -1,0 +1,12 @@
+TU HOJA DE VIDA (CV)
+====================
+
+Guarda aquí tu CV en PDF con EXACTAMENTE este nombre:
+
+  CV-Andrey-Ricaurte.pdf
+
+Los botones "Descargar CV" de la página lo descargarán.
+Si usas otro nombre, cambia la ruta en index.html
+(busca "CV-Andrey-Ricaurte.pdf": aparece en 2 lugares).
+
+Puedes borrar este archivo cuando termines.
