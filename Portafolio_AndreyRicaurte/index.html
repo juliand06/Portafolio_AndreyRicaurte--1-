@@ -476,39 +476,50 @@
     <section class="sheet" id="path" aria-labelledby="path-h">
       <div class="wrap sheet__grid">
         <div class="sheet__head"><h2 id="path-h" data-i18n="path_title"></h2></div>
-
-        <!-- ✏️ EDITAR: cada <li class="tl__item"> es una fila (estudio, experiencia, curso).
-             Los textos están en js/i18n.js (claves t1_..., t2_..., t3_...).
-             Para quitar una fila, borra su <li>…</li>. -->
+    
         <div>
-        <ol class="tl">
-          <li class="tl__item">
-            <p class="tl__year" data-i18n="t1_year"></p>
-            <div><h3 data-i18n="t1_title"></h3><p class="tl__place" data-i18n="t1_place"></p><p data-i18n="t1_desc"></p></div>
-          </li>
-          <li class="tl__item">
-            <p class="tl__year" data-i18n="t2_year"></p>
-            <div><h3 data-i18n="t2_title"></h3><p class="tl__place" data-i18n="t2_place"></p><p data-i18n="t2_desc"></p></div>
-          </li>
-          <li class="tl__item">
-            <p class="tl__year" data-i18n="t3_year"></p>
-            <div><h3 data-i18n="t3_title"></h3><p class="tl__place" data-i18n="t3_place"></p><p data-i18n="t3_desc"></p></div>
-          </li>
-        </ol>
-
-        <!-- ✏️ EDITAR: tus certificados y cursos (textos en js/i18n.js, claves cert1_..., cert2_...).
-             Para quitar uno, borra su <li>. -->
-        <div class="certs">
-          <h3 data-i18n="cert_title"></h3>
-          <ul>
-            <li><strong data-i18n="cert1_name"></strong><span data-i18n="cert1_place"></span></li>
-            <li><strong data-i18n="cert2_name"></strong><span data-i18n="cert2_place"></span></li>
-            <li><strong data-i18n="cert3_name"></strong><span data-i18n="cert3_place"></span></li>
-          </ul>
-        </div>
+          <ol class="tl">
+            <li class="tl__item">
+              <p class="tl__year">2013-2024</p>
+              <div>
+                <h3>Escuela Normal Superior de Piedecuesta</h3>
+                <p class="tl__place"></p>
+                <p></p>
+              </div>
+            </li>
+            <li class="tl__item">
+              <p class="tl__year">2026</p>
+              <div>
+                <h3>CampusLand</h3>
+                <p class="tl__place"></p>
+                <p>Formación académica de desarrollo de software y proyectos de vida e integración al backend.</p>
+              </div>
+            </li>
+          </ol>
+    
+          <div class="certs">
+            <h3 data-i18n="cert_title"></h3>
+            <ul>
+              <li><strong data-i18n="cert1_name"></strong><span data-i18n="cert1_place"></span></li>
+              <li><strong data-i18n="cert2_name"></strong><span data-i18n="cert2_place"></span></li>
+              <li><strong data-i18n="cert3_name"></strong><span data-i18n="cert3_place"></span></li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
+    
+      <!-- ✏️ EDITAR: tus certificados y cursos (textos en js/i18n.js, claves cert1_..., cert2_...).
+           Para quitar uno, borra su <li>. -->
+      <div class="certs">
+        <h3 data-i18n="cert_title"></h3>
+        <ul>
+          <li><strong data-i18n="cert1_name"></strong><span data-i18n="cert1_place"></span></li>
+          <li><strong data-i18n="cert2_name"></strong><span data-i18n="cert2_place"></span></li>
+          <li><strong data-i18n="cert3_name"></strong><span data-i18n="cert3_place"></span></li>
+        </ul>
+      </div>
+    </div>
 
     <!-- ✏️ OPCIONAL · RECOMENDACIONES
          Si tienes una recomendación de un profesor, jefe o compañero, activa esta sección:
@@ -542,24 +553,24 @@
             <li>
               <span class="contact__k" data-i18n="c_mail"></span>
               <!-- ✏️ EDITAR: tu correo (cámbialo en las 3 partes: mailto, texto y data-copy) -->
-              <a class="contact__v" href="mailto:tu-correo@ejemplo.com">tu-correo@ejemplo.com</a>
-              <button type="button" class="btn btn--sm" id="copyBtn" data-copy="tu-correo@ejemplo.com" data-i18n="c_copy"></button>
+              <a class="contact__v" href="mailto:andreyricaurte10@gmail.com">andreyricaurte10@gmail.com</a>
+              <button type="button" class="btn btn--sm" id="copyBtn" data-copy="andreyricaurte10" data-i18n="c_copy"></button>
             </li>
             <li>
               <span class="contact__k" data-i18n="c_github"></span>
               <!-- ✏️ EDITAR: tu usuario de GitHub -->
-              <a class="contact__v" href="https://github.com/TU-USUARIO" target="_blank" rel="noopener noreferrer">github.com/TU-USUARIO</a>
+              <a class="contact__v" href="https://github.com/juliand06" target="_blank" rel="noopener noreferrer">https://github.com/juliand06</a>
             </li>
             <li>
               <span class="contact__k" data-i18n="c_linkedin"></span>
               <!-- ✏️ EDITAR: tu perfil de LinkedIn (si no tienes, borra todo este <li>) -->
-              <a class="contact__v" href="https://www.linkedin.com/in/TU-USUARIO" target="_blank" rel="noopener noreferrer">linkedin.com/in/TU-USUARIO</a>
+              <a class="contact__v" href="https://www.linkedin.com/in/andrey-julian-ricaurte-duran-a74959425/" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/andrey-julian-ricaurte-duran-a74959425/</a>
             </li>
             <li>
               <span class="contact__k" data-i18n="c_whatsapp"></span>
               <!-- ✏️ EDITAR: tu número con código de país y sin signos ni espacios (Colombia = 57).
                    Cambia el número en el enlace y en el texto. Si no quieres WhatsApp, borra este <li>. -->
-              <a class="contact__v" href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer">+57 300 000 0000</a>
+              <a class="contact__v" href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer">+57 313 387 0715</a>
             </li>
             <li>
               <span class="contact__k" data-i18n="c_cv"></span>
