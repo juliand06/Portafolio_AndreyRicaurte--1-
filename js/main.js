@@ -558,3 +558,229 @@
     ox = 0; oy = 0;
   });
 })();
+
+/* =====================================================================
+   CANVAS DE PARTÍCULAS DE CÓDIGO EN EL HERO
+   ===================================================================== */
+(function () {
+  'use strict';
+  var canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  var CHARS = '01{}[]()<>;:=+-*/&|!#abcdef0123456789ABCDEFxyzpqr'.split('');
+  var particles = [];
+  var W, H;
+
+  function resize() {
+    var hero = document.getElementById('hero');
+    W = canvas.width  = hero ? hero.offsetWidth  : window.innerWidth;
+    H = canvas.height = hero ? hero.offsetHeight : window.innerHeight;
+  }
+
+  function Particle() {
+    this.reset();
+  }
+  Particle.prototype.reset = function () {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.char = CHARS[Math.floor(Math.random() * CHARS.length)];
+    this.size = 10 + Math.random() * 8;
+    this.opacity = 0.04 + Math.random() * 0.12;
+    this.speed = 0.2 + Math.random() * 0.5;
+    this.drift = (Math.random() - 0.5) * 0.3;
+    this.life = 0;
+    this.maxLife = 120 + Math.random() * 200;
+  };
+  Particle.prototype.update = function () {
+    this.y -= this.speed;
+    this.x += this.drift;
+    this.life++;
+    if (this.life > this.maxLife || this.y < -20 || this.x < -20 || this.x > W + 20) {
+      this.reset();
+      this.y = H + 10;
+    }
+  };
+  Particle.prototype.draw = function () {
+    var fade = Math.min(this.life / 30, 1, (this.maxLife - this.life) / 30);
+    ctx.globalAlpha = this.opacity * fade;
+    ctx.fillStyle = '#ffc93c';
+    ctx.font = this.size + 'px "Courier New", monospace';
+    ctx.fillText(this.char, this.x, this.y);
+  };
+
+  /* Inicializar */
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  var N = Math.min(60, Math.floor(W * H / 18000));
+  for (var i = 0; i < N; i++) {
+    var p = new Particle();
+    p.y = Math.random() * H; /* distribuir desde el principio */
+    particles.push(p);
+  }
+
+  var rafId;
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    for (var j = 0; j < particles.length; j++) {
+      particles[j].update();
+      particles[j].draw();
+    }
+    ctx.globalAlpha = 1;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  /* Pausa cuando no está visible */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { if (!rafId) loop(); }
+      else { cancelAnimationFrame(rafId); rafId = 0; }
+    }, { threshold: 0 });
+    io.observe(canvas);
+  } else {
+    loop();
+  }
+})();
+
+/* =====================================================================
+   TYPING DEL ROL EN EL HERO
+   ===================================================================== */
+(function () {
+  'use strict';
+  var el = document.getElementById('roleTyped');
+  if (!el) return;
+
+  /* Las frases se leen del i18n si está disponible, o se usan estas */
+  var PHRASES = [
+    'Desarrollador de software',
+    'Backend & Frontend',
+    'Arquitectura de software',
+    'Bases de datos SQL',
+    'Aprendiz de CampusLands'
+  ];
+
+  var phraseIdx = 0, charIdx = 0, deleting = false;
+  var SPEED_TYPE = 65, SPEED_DEL = 30, PAUSE_FULL = 2200, PAUSE_EMPTY = 500;
+
+  function tick() {
+    var phrase = PHRASES[phraseIdx];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, charIdx + 1);
+      charIdx++;
+      if (charIdx >= phrase.length) {
+        deleting = true;
+        setTimeout(tick, PAUSE_FULL);
+        return;
+      }
+    } else {
+      el.textContent = phrase.slice(0, charIdx - 1);
+      charIdx--;
+      if (charIdx <= 0) {
+        deleting = false;
+        phraseIdx = (phraseIdx + 1) % PHRASES.length;
+        setTimeout(tick, PAUSE_EMPTY);
+        return;
+      }
+    }
+    setTimeout(tick, deleting ? SPEED_DEL : SPEED_TYPE);
+  }
+
+  /* Arrancar después de que entra el nombre */
+  setTimeout(tick, 1600);
+})();
+
+/* =====================================================================
+   REPRODUCTOR DE MÚSICA FLOTANTE
+   ===================================================================== */
+(function () {
+  'use strict';
+  var player   = document.getElementById('musicPlayer');
+  var audio    = document.getElementById('heroAudio');
+  var playBtn  = document.getElementById('playBtn');
+  var volBtn   = document.getElementById('volBtn');
+  var vinyl    = document.getElementById('vinyl');
+  var fill     = document.getElementById('trackFill');
+  var timeEl   = document.getElementById('trackTime');
+  var durEl    = document.getElementById('trackDur');
+  var progress = document.getElementById('trackProgress');
+  var toggle   = document.getElementById('mpToggle');
+  var eq       = document.getElementById('eqBars');
+  if (!player || !audio) return;
+
+  /* Mostrar el reproductor tras 2 s de carga */
+  setTimeout(function () { player.classList.add('is-visible'); }, 2000);
+
+  /* Colapsar / expandir */
+  var collapsed = false;
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      collapsed = !collapsed;
+      player.classList.toggle('is-collapsed', collapsed);
+      toggle.textContent = collapsed ? '+' : '\u2212';
+    });
+  }
+
+  /* Formato de tiempo mm:ss */
+  function fmt(s) {
+    s = Math.floor(s || 0);
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+
+  /* Botón play/pause */
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play().catch(function () { /* autoplay bloqueado */ });
+    } else {
+      audio.pause();
+    }
+  }
+  if (playBtn) playBtn.addEventListener('click', togglePlay);
+
+  audio.addEventListener('play', function () {
+    player.classList.add('is-playing');
+    if (vinyl) vinyl.classList.add('is-spinning');
+  });
+  audio.addEventListener('pause', function () {
+    player.classList.remove('is-playing');
+    if (vinyl) vinyl.classList.remove('is-spinning');
+  });
+
+  /* Duración */
+  audio.addEventListener('loadedmetadata', function () {
+    if (durEl) durEl.textContent = fmt(audio.duration);
+  });
+
+  /* Progreso */
+  audio.addEventListener('timeupdate', function () {
+    var pct = audio.duration ? (audio.currentTime / audio.duration * 100) : 0;
+    if (fill) fill.style.width = pct + '%';
+    if (timeEl) timeEl.textContent = fmt(audio.currentTime);
+    if (progress) progress.setAttribute('aria-valuenow', Math.round(pct));
+  });
+
+  /* Clic en la barra para saltar */
+  if (progress) {
+    progress.addEventListener('click', function (e) {
+      var r = progress.getBoundingClientRect();
+      var pct = (e.clientX - r.left) / r.width;
+      if (audio.duration) audio.currentTime = pct * audio.duration;
+    });
+  }
+
+  /* Botón de volumen / mute */
+  if (volBtn) {
+    volBtn.addEventListener('click', function () {
+      audio.muted = !audio.muted;
+      volBtn.style.opacity = audio.muted ? '.4' : '1';
+    });
+  }
+
+  /* Nombre de la pista desde el src */
+  var src = audio.src || '';
+  var name = src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+  var titleEl = document.getElementById('trackTitle');
+  if (titleEl && name && name !== 'track') {
+    titleEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+  }
+})();
