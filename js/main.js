@@ -784,3 +784,487 @@
     titleEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
   }
 })();
+
+/* =====================================================================
+   TILT 3D SUAVE — proyectos, servicios, certificados
+   Máx. 8° de inclinación. Se resetea al salir del cursor.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  /* Omitir si el usuario prefiere menos movimiento */
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  /* Solo dispositivos con puntero fino (mouse) */
+  if (window.matchMedia && !window.matchMedia('(pointer: fine)').matches) return;
+
+  var MAX_TILT   = 8;     /* grados máximos de inclinación */
+  var MAX_SCALE  = 1.03;  /* escala al hacer hover */
+  var PERSP      = 900;   /* perspectiva en px */
+
+  /* Selectores de tarjetas a animar */
+  var SELECTORS = '.proj, .offer__item, .certs li';
+
+  function applyTilt(card, e) {
+    var r = card.getBoundingClientRect();
+    /* Posición relativa al centro de la tarjeta, de -1 a 1 */
+    var cx = (e.clientX - r.left)  / r.width  - 0.5;
+    var cy = (e.clientY - r.top)   / r.height - 0.5;
+
+    /* rotateY positivo → lado derecho se aleja */
+    var ry =  cx * MAX_TILT * 2;
+    /* rotateX positivo → borde superior se acerca */
+    var rx = -cy * MAX_TILT * 2;
+
+    card.classList.remove('tilt-reset');
+    card.style.transform =
+      'perspective(' + PERSP + 'px) ' +
+      'rotateX(' + rx.toFixed(2) + 'deg) ' +
+      'rotateY(' + ry.toFixed(2) + 'deg) ' +
+      'scale3d(' + MAX_SCALE + ',' + MAX_SCALE + ',1)';
+
+    /* Actualizar la posición del brillo */
+    card.style.setProperty('--mx', ((cx + 0.5) * 100).toFixed(1) + '%');
+    card.style.setProperty('--my', ((cy + 0.5) * 100).toFixed(1) + '%');
+  }
+
+  function resetTilt(card) {
+    card.classList.add('tilt-reset');
+    card.style.transform =
+      'perspective(' + PERSP + 'px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+  }
+
+  /* Usar RAF para no saturar el hilo principal */
+  var pending = null;
+
+  function onMove(e) {
+    var card = e.currentTarget;
+    if (pending) { cancelAnimationFrame(pending); }
+    pending = requestAnimationFrame(function () {
+      applyTilt(card, e);
+      pending = null;
+    });
+  }
+
+  function onLeave(e) {
+    if (pending) { cancelAnimationFrame(pending); pending = null; }
+    resetTilt(e.currentTarget);
+  }
+
+  /* Adjuntar eventos a todas las tarjetas */
+  function attachToCards() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll(SELECTORS));
+    cards.forEach(function (card) {
+      /* Evitar doble registro */
+      if (card._tiltBound) return;
+      card._tiltBound = true;
+      card.addEventListener('mousemove', onMove, { passive: true });
+      card.addEventListener('mouseleave', onLeave, { passive: true });
+    });
+  }
+
+  /* Ejecutar al cargar y también al revelar con IntersectionObserver
+     (las tarjetas pueden aparecer después del primer render) */
+  attachToCards();
+
+  /* Re-ejecutar si hay tarjetas que entran al viewport dinámicamente */
+  if ('MutationObserver' in window) {
+    var mo = new MutationObserver(function () { attachToCards(); });
+    var main = document.getElementById('main');
+    if (main) mo.observe(main, { childList: true, subtree: true });
+  }
+})();
+
+/* =====================================================================
+   GENGAR CANVAS ANIMADO
+   ===================================================================== */
+(function () {
+  'use strict';
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var W = 90, H = 100;
+  var container = document.createElement('div');
+  container.id = 'gengar-buddy';
+  container.style.width = W + 'px';
+  container.style.height = H + 'px';
+
+  var canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  container.appendChild(canvas);
+
+  var bubble = document.createElement('div');
+  bubble.id = 'gengar-bubble';
+  document.body.appendChild(container);
+  document.body.appendChild(bubble);
+
+  var ctx = canvas.getContext('2d');
+  
+  var x = Math.random() * (window.innerWidth - W);
+  var y = window.scrollY + 100 + Math.random() * (window.innerHeight - 200);
+  var tx = x, ty = y;
+  var speed = 1.5;
+  var paused = false;
+  var pauseTimer = null;
+  var facingLeft = true;
+  
+  var time = 0;
+  
+  function pickTarget() {
+    tx = Math.max(10, Math.min(Math.random() * window.innerWidth, window.innerWidth - W - 10));
+    ty = Math.max(10, Math.min(Math.random() * document.documentElement.scrollHeight, document.documentElement.scrollHeight - H - 10));
+  }
+
+  function drawGengar(t) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    
+    // Si va a la derecha, voltear el canvas
+    if (!facingLeft) {
+      ctx.translate(W, 0);
+      ctx.scale(-1, 1);
+    }
+
+    // Bobbing y respiración
+    var bob = Math.sin(t * 0.003) * 3;
+    var breath = Math.sin(t * 0.002) * 0.05;
+    
+    ctx.translate(W/2, H/2 + bob + 5);
+    ctx.scale(1 + breath, 1 - breath);
+    
+    // Cuerpo (elipse gorda)
+    var grad = ctx.createRadialGradient(-5, -10, 5, 0, 0, 45);
+    grad.addColorStop(0, '#9B7CC8');
+    grad.addColorStop(1, '#5A3E8A');
+    
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    // Orejas articuladas sutilmente
+    var earWiggle = Math.cos(t * 0.005) * 2;
+    ctx.moveTo(-25 - earWiggle, -35 + earWiggle);
+    ctx.lineTo(-10, -25);
+    ctx.lineTo(10, -25);
+    ctx.lineTo(25 + earWiggle, -35 + earWiggle);
+    ctx.lineTo(35, -5);
+    
+    ctx.arc(0, 0, 40, -Math.PI/6, Math.PI + Math.PI/6, true);
+    ctx.closePath();
+    ctx.fill();
+
+    // Brazos
+    var armSwing = (paused ? 0 : Math.sin(t * 0.008) * 5);
+    ctx.fillStyle = '#6B4AA0';
+    ctx.beginPath();
+    ctx.ellipse(-38, 10 + armSwing, 7, 5, -0.2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(38, 10 - armSwing, 7, 5, 0.2, 0, Math.PI*2);
+    ctx.fill();
+
+    // Cara (ojos y sonrisa macabra)
+    // Parpadeo
+    var blink = (Math.random() > 0.98) ? 0.1 : 1;
+    
+    ctx.fillStyle = '#EE2233';
+    ctx.beginPath();
+    ctx.ellipse(-15, -5, 12, 13 * blink, 0, 0, Math.PI*2);
+    ctx.ellipse(15, -5, 12, 13 * blink, 0, 0, Math.PI*2);
+    ctx.fill();
+    
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(-18, -8, 4, 0, Math.PI*2);
+    ctx.arc(12, -8, 4, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle = '#12062A';
+    ctx.beginPath();
+    ctx.arc(-17, -7, 2, 0, Math.PI*2);
+    ctx.arc(13, -7, 2, 0, Math.PI*2);
+    ctx.fill();
+    
+    // Sonrisa
+    ctx.beginPath();
+    ctx.moveTo(-25, 15);
+    ctx.quadraticCurveTo(0, 35, 25, 15);
+    ctx.quadraticCurveTo(0, 25, -25, 15);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  var PHRASES = ['Boo! 👻', 'Loading scares...', 'System.out.haunt()', '404 Sleep Not Found'];
+  function showBubble() {
+    bubble.textContent = PHRASES[Math.floor(Math.random() * PHRASES.length)];
+    bubble.style.display = 'block';
+    // Forzar reflow
+    void bubble.offsetWidth;
+    bubble.style.opacity = '1';
+    setTimeout(function() {
+      bubble.style.opacity = '0';
+      setTimeout(function(){ bubble.style.display = 'none'; }, 350);
+    }, 2500);
+  }
+
+  function loop(now) {
+    time = now;
+    
+    if (!paused) {
+      var dx = tx - x;
+      var dy = ty - y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 5) {
+        paused = true;
+        clearTimeout(pauseTimer);
+        pauseTimer = setTimeout(function () {
+          if (Math.random() < 0.3) showBubble();
+          pickTarget();
+          paused = false;
+        }, 1000 + Math.random() * 3000);
+      } else {
+        var s = Math.min(speed, dist * 0.05);
+        x += (dx / dist) * s;
+        y += (dy / dist) * s;
+        if (dx > 1) facingLeft = false;
+        if (dx < -1) facingLeft = true;
+      }
+    }
+
+    container.style.transform = 'translate(' + Math.round(x) + 'px, ' + Math.round(y) + 'px)';
+    
+    var bRect = container.getBoundingClientRect();
+    bubble.style.left = (bRect.left + W/2) + 'px';
+    bubble.style.top = (bRect.top - 10) + 'px';
+
+    drawGengar(now);
+    requestAnimationFrame(loop);
+  }
+
+  pickTarget();
+  requestAnimationFrame(loop);
+})();
+
+/* =====================================================================
+   BACKGROUND BLACK HOLE WEBGL
+   ===================================================================== */
+(function() {
+  'use strict';
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var canvas = document.getElementById('bg-blackhole');
+  if (!canvas) return;
+  var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) { canvas.style.display='none'; return; }
+
+  var vs = `
+    attribute vec2 position;
+    void main() {
+      gl_Position = vec4(position, 0.0, 1.0);
+    }
+  `;
+
+  var fs = `
+    precision highp float;
+    uniform vec2 u_resolution;
+    uniform float u_time;
+
+    #define MAX_STEPS 80
+    #define MAX_DIST 20.0
+    
+    mat2 rot(float a) {
+      float s = sin(a), c = cos(a);
+      return mat2(c, -s, s, c);
+    }
+
+    float hash(float n) { return fract(sin(n)*43758.5453); }
+    float hash3(vec3 p) {
+      return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453);
+    }
+
+    float noise(vec3 x) {
+      vec3 p = floor(x);
+      vec3 f = fract(x);
+      f = f*f*(3.0-2.0*f);
+      float n = p.x + p.y*57.0 + 113.0*p.z;
+      return mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
+                     mix( hash(n+ 57.0), hash(n+ 58.0),f.x),f.y),
+                 mix(mix( hash(n+113.0), hash(n+114.0),f.x),
+                     mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+    }
+
+    float fbm(vec3 p) {
+      float f = 0.0;
+      float w = 0.5;
+      for (int i=0; i<5; i++) {
+        f += w * noise(p);
+        p *= 2.0;
+        w *= 0.5;
+      }
+      return f;
+    }
+
+    // Genera el fondo de la galaxia (polvo y estrellas)
+    vec3 getBackground(vec3 dir) {
+      // Banda horizontal galáctica
+      float band = exp(-pow(abs(dir.y)*3.0, 1.5));
+      
+      // Ruido para el polvo estelar (nubes grises/azules/marrones)
+      float n1 = fbm(dir * 12.0);
+      float n2 = fbm(dir * 25.0);
+      float dust = smoothstep(0.2, 0.8, n1) * band;
+      float darkDust = smoothstep(0.3, 0.7, n2) * band * 0.8;
+      
+      // Color base del polvo
+      vec3 dustCol = mix(vec3(0.05, 0.1, 0.15), vec3(0.7, 0.75, 0.8), n1);
+      dustCol = mix(dustCol, vec3(0.1, 0.08, 0.05), darkDust); // venas oscuras
+      dustCol *= dust * 1.5;
+      
+      // Estrellas
+      float star = pow(hash3(dir * 200.0), 150.0);
+      float star2 = pow(hash3(dir * 150.0 + 10.0), 80.0) * band;
+      vec3 starCol = vec3(1.0, 0.9, 0.8) * star * 3.0 + vec3(0.6, 0.8, 1.0) * star2 * 1.5;
+      
+      // Luz central de la galaxia a la derecha
+      float core = exp(-length(vec2(dir.x - 0.8, dir.y)) * 3.0);
+      vec3 coreCol = vec3(1.0, 0.9, 0.7) * core * 1.2;
+      
+      // Fondo cósmico tenue
+      vec3 ambient = vec3(0.02, 0.03, 0.05);
+      
+      return ambient + dustCol + starCol + coreCol;
+    }
+
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      // Posicionamos el centro (agujero negro) en el 25% izquierdo de la pantalla
+      uv.x -= 0.25;
+      uv.y -= 0.5;
+      // Mantenemos el aspecto
+      uv.x *= u_resolution.x / min(u_resolution.x, u_resolution.y);
+      uv.y *= u_resolution.y / min(u_resolution.x, u_resolution.y);
+      
+      // Cámara
+      vec3 ro = vec3(0.0, 0.0, 5.0);
+      vec3 rd = normalize(vec3(uv, -1.0));
+      
+      // Cámara fija
+      ro.xy *= rot(0.1);
+      rd.xy *= rot(0.1);
+      // Inclinamos un poco para ver el disco
+      ro.yz *= rot(-0.15);
+      rd.yz *= rot(-0.15);
+
+      vec3 p = ro;
+      float dt = 0.08; // Mayor paso para que los rayos viajen más lejos
+      float mass = 0.6; // Masa del agujero negro
+      
+      bool hitHorizon = false;
+      vec3 diskColAcc = vec3(0.0);
+      
+      // Raymarching para curvar la luz (lente gravitacional) y leer el disco
+      for(int i = 0; i < 120; i++) { // Más pasos
+        float r = length(p);
+        
+        // Si cruza el horizonte de eventos
+        if(r < mass * 0.9) {
+          hitHorizon = true;
+          break;
+        }
+        // Si se aleja lo suficiente, asumimos que escapó
+        if(r > MAX_DIST) {
+          break;
+        }
+        float currentMass = mass;
+        
+        // Gravedad: fuerza que curva el rayo hacia el origen
+        vec3 force = -normalize(p) * (currentMass / (r * r));
+        rd = normalize(rd + force * 0.04);
+        
+        p += rd * dt;
+        
+        // Disco de acreción con colores, destellos y movimiento
+        float diskDist = abs(p.y);
+        float diskRadius = length(p.xz);
+        
+        if (diskRadius > mass * 1.5 && diskRadius < mass * 3.5 && diskDist < 0.15) {
+          float density = smoothstep(0.15, 0.0, diskDist) * smoothstep(mass*3.5, mass*1.5, diskRadius);
+          
+          float angle = atan(p.z, p.x);
+          // El disco rota
+          float t = u_time * 1.5;
+          
+          // Ruido para generar nubes y sombras moviéndose fluidamente en el disco
+          float n = fbm(vec3(angle * 6.0 - t, diskRadius * 5.0 - t * 0.5, t * 0.3));
+          
+          density *= smoothstep(0.1, 0.9, n);
+          
+          // Colores de sombras blancas y frías fluyendo (sin puntitos)
+          vec3 dCol = mix(vec3(0.6, 0.7, 0.85), vec3(1.0, 1.0, 1.0), n);
+          
+          // Efecto Doppler visual (un lado se acerca más brillante, el otro se aleja)
+          float doppler = 1.0 + (p.x / diskRadius) * 0.5;
+          dCol *= doppler;
+          
+          diskColAcc += dCol * density * 0.1; // Ajustado brillo del disco
+        }
+      }
+      
+      vec3 col = diskColAcc;
+      
+      if (!hitHorizon) {
+        col += getBackground(rd); // SUMAR el fondo al disco, no sobreescribir
+      }
+      
+      // Viñeteado para oscurecer los bordes y darle más foco
+      float distCenter = length(gl_FragCoord.xy / u_resolution.xy - 0.5);
+      col *= smoothstep(0.8, 0.2, distCenter * 0.8);
+      
+      // Ajuste de brillo para que sirva de fondo sutil (no tapar el texto)
+      col *= 0.5;
+      
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  function createShader(type, source) {
+    var shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    return shader;
+  }
+
+  var vertexShader = createShader(gl.VERTEX_SHADER, vs);
+  var fragmentShader = createShader(gl.FRAGMENT_SHADER, fs);
+  
+  var program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  gl.useProgram(program);
+
+  var vertices = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+  var posLoc = gl.getAttribLocation(program, 'position');
+  gl.enableVertexAttribArray(posLoc);
+  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+  var resLoc = gl.getUniformLocation(program, 'u_resolution');
+  var timeLoc = gl.getUniformLocation(program, 'u_time');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function render(time) {
+    gl.uniform2f(resLoc, canvas.width, canvas.height);
+    gl.uniform1f(timeLoc, time * 0.001);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();

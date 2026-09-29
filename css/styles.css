@@ -38,8 +38,8 @@
   --ink-2: #888896;
   --line: rgba(255, 255, 255, .07);
   --line-strong: rgba(255, 255, 255, .16);
-  --grid-minor: rgba(255, 255, 255, .03);
-  --grid-major: rgba(255, 255, 255, .06);
+  --grid-minor: rgba(255, 255, 255, .015);
+  --grid-major: rgba(255, 255, 255, .03);
   --signal: #ffc93c;
   --signal-ink: #1a1400;
   --focus: #ffc93c;
@@ -1179,4 +1179,131 @@ main.swap { animation: swap .45s var(--e); }
   .music-player__eq span { animation: none !important; }
   .hero__canvas { display: none; }
   .hero__name--glitch::before, .hero__name--glitch::after { display: none; }
+}
+
+/* =====================================================================
+   EFECTO TILT 3D — tarjetas de proyectos, servicios y certificados
+   Sutil: máx. 8° de inclinación, con luz que sigue al cursor.
+   ===================================================================== */
+
+/* Contexto de perspectiva para todas las tarjetas */
+.proj,
+.offer__item,
+.certs li {
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0);
+  transition:
+    transform .08s linear,
+    border-color .25s,
+    box-shadow .25s;
+  will-change: transform;
+}
+
+/* Sombra que aparece al inclinar (da sensación de profundidad) */
+.proj:hover,
+.offer__item:hover,
+.certs li:hover {
+  box-shadow:
+    0 12px 36px rgba(0,0,0,.5),
+    0 4px 12px rgba(0,0,0,.3);
+}
+
+/* Al soltar el cursor, vuelve suave */
+.proj.tilt-reset,
+.offer__item.tilt-reset,
+.certs li.tilt-reset {
+  transition:
+    transform .5s cubic-bezier(.2,.8,.2,1),
+    border-color .25s,
+    box-shadow .5s;
+}
+
+/* Brillo interno que sigue al cursor (ya existía en proj/offer pero lo refinamos) */
+.proj::before,
+.offer__item::before,
+.certs li::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  pointer-events: none; border-radius: inherit;
+  background: radial-gradient(
+    180px circle at var(--mx,50%) var(--my,50%),
+    rgba(255,201,60,.10) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity .3s;
+}
+.proj:hover::before,
+.offer__item:hover::before,
+.certs li:hover::before { opacity: 1; }
+
+/* Los hijos con transform-style también se "elevan" un poco */
+.proj__thumb,
+.offer__item svg,
+.certs strong {
+  transition: transform .08s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proj, .offer__item, .certs li {
+    transform: none !important;
+    transition: border-color .25s, background .2s !important;
+  }
+}
+
+/* =====================================================================
+   GENGAR CANVAS — fantasma con articulaciones dibujado en canvas
+   ===================================================================== */
+#gengar-buddy {
+  position: absolute;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: left, top, transform;
+  filter: drop-shadow(0 5px 14px rgba(90,30,180,.65));
+}
+#gengar-bubble {
+  position: absolute;
+  z-index: 10000;
+  pointer-events: none;
+  background: rgba(14,8,28,.93);
+  border: 1px solid rgba(170,120,255,.4);
+  border-radius: 8px;
+  padding: .28rem .62rem;
+  font-size: .72rem;
+  font-family: "IBM Plex Sans", monospace;
+  font-weight: 600;
+  color: #c8a8ff;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .35s;
+  display: none;
+}
+#gengar-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(14,8,28,.93);
+}
+@media (prefers-reduced-motion: reduce) {
+  #gengar-buddy, #gengar-bubble { display: none !important; }
+}
+
+/* =====================================================================
+   BACKGROUND BLACK HOLE CANVAS
+   ===================================================================== */
+#bg-blackhole {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--paper); /* Fallback */
+}
+/* Ensure the page background is transparent so the canvas shows through */
+.page {
+  background: transparent !important;
 }
