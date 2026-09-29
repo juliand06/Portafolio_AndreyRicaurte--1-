@@ -72,7 +72,7 @@
   /* ------------------------------ Tema ------------------------------ */
   var themeMeta = $('meta[name="theme-color"]');
   function syncThemeColor() {
-    if (themeMeta) themeMeta.setAttribute('content', root.getAttribute('data-theme') === 'light' ? '#f4f7ff' : '#0a2058');
+    if (themeMeta) themeMeta.setAttribute('content', root.getAttribute('data-theme') === 'light' ? '#f4f7ff' : '#0e0e10');
   }
   syncThemeColor();
 
@@ -274,4 +274,287 @@
   if (y) y.textContent = new Date().getFullYear();
 
   applyLang(lang);
+})();
+
+/* =====================================================================
+   TERMINAL ANIMADA — escribe código Python carácter a carácter
+   ===================================================================== */
+(function () {
+  'use strict';
+  var termBody = document.getElementById('termBody');
+  if (!termBody) return;
+
+  var LINES = [
+    { type: 'prompt', text: '' },
+    { type: 'cmd',    text: '# Portafolio de Andrey Ricaurte — CampusLands 2026' },
+    { type: 'blank' },
+    { type: 'prompt', text: '' },
+    { type: 'kw',     text: 'class ' },
+    { type: 'fn',     text: 'Developer' },
+    { type: 'cmd',    text: ':' },
+    { type: 'kw',     text: '    def ' },
+    { type: 'fn',     text: '__init__' },
+    { type: 'cmd',    text: '(self):' },
+    { type: 'str',    text: '        self.name   ' },
+    { type: 'cmd',    text: '= ' },
+    { type: 'str',    text: '"Andrey Ricaurte"' },
+    { type: 'nl' },
+    { type: 'str',    text: '        self.stack  ' },
+    { type: 'cmd',    text: '= [' },
+    { type: 'str',    text: '"Python"' },
+    { type: 'cmd',    text: ', ' },
+    { type: 'str',    text: '"Java"' },
+    { type: 'cmd',    text: ', ' },
+    { type: 'str',    text: '"SQL"' },
+    { type: 'cmd',    text: ', ' },
+    { type: 'str',    text: '"JavaScript"' },
+    { type: 'cmd',    text: ']' },
+    { type: 'nl' },
+    { type: 'str',    text: '        self.role   ' },
+    { type: 'cmd',    text: '= ' },
+    { type: 'str',    text: '"Software Developer"' },
+    { type: 'nl' },
+    { type: 'str',    text: '        self.status ' },
+    { type: 'cmd',    text: '= ' },
+    { type: 'str',    text: '"Disponible"' },
+    { type: 'nl' },
+    { type: 'blank' },
+    { type: 'kw',     text: '    def ' },
+    { type: 'fn',     text: 'build' },
+    { type: 'cmd',    text: '(self, idea):' },
+    { type: 'nl' },
+    { type: 'comment',text: '        # Convierte ideas en soluciones reales' },
+    { type: 'nl' },
+    { type: 'kw',     text: '        return ' },
+    { type: 'fn',     text: 'Solution' },
+    { type: 'cmd',    text: '(idea, stack=self.stack)' },
+    { type: 'nl' },
+    { type: 'blank' },
+    { type: 'prompt', text: '' },
+    { type: 'cmd',    text: 'dev = Developer()' },
+    { type: 'nl' },
+    { type: 'prompt', text: '' },
+    { type: 'cmd',    text: 'print(dev.name, dev.status)' },
+    { type: 'nl' },
+    { type: 'out',    text: 'Andrey Ricaurte  Disponible ✓' },
+    { type: 'nl' },
+    { type: 'prompt', text: '' },
+    { type: 'cmd',    text: 'dev.build("Tu próximo proyecto")' },
+    { type: 'nl' },
+    { type: 'ok',     text: '<Solution ready — hablemos 🚀>' },
+    { type: 'nl' },
+  ];
+
+  /* Construye el HTML de una línea */
+  function spanClass(type) {
+    return {
+      prompt: 'term-prompt', cmd: 'term-cmd', kw: 'term-kw',
+      str: 'term-str', fn: 'term-fn', num: 'term-num',
+      comment: 'term-comment', out: 'term-out', ok: 'term-ok'
+    }[type] || 'term-cmd';
+  }
+
+  /* Escritura carácter a carácter */
+  var charsPerFrame = 2;
+  var frameDelay = 28;         /* ms entre frames */
+  var pauseAfterNl = 90;       /* ms de pausa entre líneas */
+  var pauseBlank = 220;
+
+  var cursor = document.createElement('span');
+  cursor.className = 'term-cursor';
+
+  var currentLine = null;
+  var lineIdx = 0, charIdx = 0;
+  var isPaused = false;
+
+  function getCurrentSpan() {
+    if (!currentLine) {
+      currentLine = document.createElement('span');
+      currentLine.className = 'term-line';
+      termBody.appendChild(currentLine);
+    }
+    return currentLine;
+  }
+
+  function appendToLine(cls, ch) {
+    var line = getCurrentSpan();
+    /* reuse last child if same class */
+    var last = line.lastChild;
+    if (last && last.nodeType === 1 && last.className === cls) {
+      last.textContent += ch;
+    } else {
+      var s = document.createElement('span');
+      s.className = cls;
+      s.textContent = ch;
+      line.appendChild(s);
+    }
+    /* keep cursor at end */
+    if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+    line.appendChild(cursor);
+    termBody.scrollTop = termBody.scrollHeight;
+  }
+
+  function nextStep() {
+    if (lineIdx >= LINES.length) {
+      /* reset y vuelve a empezar después de 2.5 s */
+      setTimeout(function () {
+        termBody.innerHTML = '';
+        currentLine = null; lineIdx = 0; charIdx = 0;
+        if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+        schedule();
+      }, 2500);
+      return;
+    }
+
+    var seg = LINES[lineIdx];
+
+    if (seg.type === 'nl') {
+      currentLine = null;
+      lineIdx++; charIdx = 0;
+      setTimeout(schedule, pauseAfterNl);
+      return;
+    }
+    if (seg.type === 'blank') {
+      var blankLine = document.createElement('span');
+      blankLine.className = 'term-line';
+      blankLine.innerHTML = '&nbsp;';
+      termBody.appendChild(blankLine);
+      currentLine = null; lineIdx++; charIdx = 0;
+      setTimeout(schedule, pauseBlank);
+      return;
+    }
+    if (seg.type === 'prompt') {
+      getCurrentSpan();
+      var ps = document.createElement('span');
+      ps.className = 'term-prompt';
+      ps.textContent = '>>> ';
+      getCurrentSpan().appendChild(ps);
+      if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+      getCurrentSpan().appendChild(cursor);
+      lineIdx++; charIdx = 0;
+      setTimeout(schedule, 120);
+      return;
+    }
+
+    /* char-by-char */
+    var txt = seg.text;
+    var cls = spanClass(seg.type);
+    for (var i = 0; i < charsPerFrame && charIdx < txt.length; i++, charIdx++) {
+      appendToLine(cls, txt[charIdx]);
+    }
+    if (charIdx >= txt.length) {
+      lineIdx++; charIdx = 0;
+      setTimeout(schedule, frameDelay);
+    } else {
+      setTimeout(schedule, frameDelay);
+    }
+  }
+
+  function schedule() { requestAnimationFrame(nextStep); }
+
+  /* Arranca cuando la terminal entra en el viewport */
+  if ('IntersectionObserver' in window) {
+    var termObs = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { termObs.disconnect(); schedule(); }
+    }, { threshold: 0.2 });
+    termObs.observe(document.getElementById('terminal'));
+  } else {
+    schedule();
+  }
+})();
+
+/* =====================================================================
+   CARNET ARRASTRABLE + FLIP AL HACER CLIC + BRILLO
+   ===================================================================== */
+(function () {
+  'use strict';
+  var card = document.getElementById('devCard');
+  var inner = document.getElementById('devCardInner');
+  if (!card || !inner) return;
+
+  var isFlipped = false;
+  var isDragging = false;
+  var startX, startY, startLeft, startTop;
+  var ox = 0, oy = 0;   /* offset de posición acumulada */
+
+  /* --- Flip al clic (sólo si no fue un drag) --- */
+  var didDrag = false;
+  card.addEventListener('click', function (e) {
+    if (didDrag) return;
+    isFlipped = !isFlipped;
+    inner.classList.toggle('is-flipped', isFlipped);
+  });
+
+  /* --- Brillo que sigue al puntero --- */
+  card.addEventListener('pointermove', function (e) {
+    var r = card.getBoundingClientRect();
+    var sx = ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%';
+    var sy = ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%';
+    card.style.setProperty('--sx', sx);
+    card.style.setProperty('--sy', sy);
+  });
+
+  /* --- Inclinación 3D al hover --- */
+  card.addEventListener('mousemove', function (e) {
+    if (isDragging) return;
+    var r = card.getBoundingClientRect();
+    var cx = r.left + r.width / 2;
+    var cy = r.top + r.height / 2;
+    var rx = ((e.clientY - cy) / r.height * 2) * -14; /* deg */
+    var ry = ((e.clientX - cx) / r.width * 2) * 14;
+    inner.style.transform = (isFlipped ? 'rotateY(180deg) ' : '') +
+      'rotateX(' + rx + 'deg) rotateY(' + (isFlipped ? 180 + ry : ry) + 'deg)';
+  });
+  card.addEventListener('mouseleave', function () {
+    if (isDragging) return;
+    inner.style.transform = isFlipped ? 'rotateY(180deg)' : '';
+  });
+
+  /* --- Drag con pointer events --- */
+  card.addEventListener('pointerdown', function (e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    didDrag = false;
+    isDragging = false;
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = ox;
+    startTop = oy;
+    card.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  card.addEventListener('pointermove', function (e) {
+    if (!card.hasPointerCapture || !card.hasPointerCapture(e.pointerId)) return;
+    var dx = e.clientX - startX;
+    var dy = e.clientY - startY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+      if (!isDragging) {
+        isDragging = true; didDrag = true;
+        card.classList.add('is-dragging');
+      }
+    }
+    if (!isDragging) return;
+    ox = startLeft + dx;
+    oy = startTop + dy;
+    card.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
+    e.preventDefault();
+  });
+
+  card.addEventListener('pointerup', function (e) {
+    if (!isDragging) return;
+    isDragging = false;
+    card.classList.remove('is-dragging');
+    /* rebote suave de vuelta al centro */
+    card.style.transition = 'transform .6s cubic-bezier(.34,1.56,.64,1)';
+    card.style.transform = 'translate(0,0)';
+    ox = 0; oy = 0;
+    setTimeout(function () { card.style.transition = ''; }, 650);
+  });
+
+  card.addEventListener('pointercancel', function () {
+    isDragging = false;
+    card.classList.remove('is-dragging');
+    card.style.transform = 'translate(0,0)';
+    ox = 0; oy = 0;
+  });
 })();
