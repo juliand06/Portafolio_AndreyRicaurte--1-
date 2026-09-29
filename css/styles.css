@@ -35,7 +35,7 @@
   --paper-2: rgba(24, 24, 28, 0.45);
   --paper-glass: rgba(14, 14, 16, .88);
   --ink: #ffffff;
-  --ink-2: #c4c4d4;
+  --ink-2: #ffffff;
   --line: rgba(255, 255, 255, .07);
   --line-strong: rgba(255, 255, 255, .16);
   --grid-minor: rgba(255, 255, 255, .015);
@@ -72,6 +72,7 @@ body {
   font-size: 1rem;
   line-height: 1.65;
   color: var(--ink);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   background-color: var(--paper);
   background-image:
     linear-gradient(var(--grid-minor) 1px, transparent 1px),
