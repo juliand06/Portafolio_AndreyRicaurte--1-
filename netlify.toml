@@ -1,0 +1,40 @@
+# ── Configuración de Netlify ──────────────────────────────────────────────────
+# Este archivo le dice a Netlify cómo desplegar el proyecto.
+# Como es un sitio estático puro (HTML + CSS + JS) no hay build command.
+
+[build]
+  # No hay proceso de build: Netlify sirve los archivos directamente.
+  publish = "."          # La raíz del repo es la carpeta publicada
+
+# ── Cabeceras de caché y seguridad ────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    Permissions-Policy     = "camera=(), microphone=(), geolocation=()"
+
+# Caché agresiva para fuentes (cambian muy poco)
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Caché agresiva para imágenes
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Caché corta para el HTML (siempre fresco)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# ── Redireccionamiento SPA (por si acaso) ─────────────────────────────────────
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
