@@ -881,22 +881,24 @@
   'use strict';
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var W = 90, H = 100;
+  var W = 65, H = 70; // Tamaño reducido
   var container = document.createElement('div');
   container.id = 'gengar-buddy';
   container.style.width = W + 'px';
   container.style.height = H + 'px';
 
-  var canvas = document.createElement('canvas');
-  canvas.width = W; canvas.height = H;
-  container.appendChild(canvas);
+  var img = document.createElement('img');
+  img.src = 'https://play.pokemonshowdown.com/sprites/xyani/gengar.gif';
+  img.style.width = '100%';
+  img.style.height = '100%';
+  img.style.objectFit = 'contain';
+  // Filtro manejado desde CSS
+  container.appendChild(img);
 
   var bubble = document.createElement('div');
   bubble.id = 'gengar-bubble';
   document.body.appendChild(container);
   document.body.appendChild(bubble);
-
-  var ctx = canvas.getContext('2d');
   
   var x = Math.random() * (window.innerWidth - W);
   var y = window.scrollY + 100 + Math.random() * (window.innerHeight - 200);
@@ -909,86 +911,10 @@
   var time = 0;
   
   function pickTarget() {
+    var mainEl = document.getElementById('main');
+    var maxH = mainEl ? (mainEl.offsetTop + mainEl.offsetHeight) : 3000;
     tx = Math.max(10, Math.min(Math.random() * window.innerWidth, window.innerWidth - W - 10));
-    ty = Math.max(10, Math.min(Math.random() * document.documentElement.scrollHeight, document.documentElement.scrollHeight - H - 10));
-  }
-
-  function drawGengar(t) {
-    ctx.clearRect(0, 0, W, H);
-    ctx.save();
-    
-    // Si va a la derecha, voltear el canvas
-    if (!facingLeft) {
-      ctx.translate(W, 0);
-      ctx.scale(-1, 1);
-    }
-
-    // Bobbing y respiración
-    var bob = Math.sin(t * 0.003) * 3;
-    var breath = Math.sin(t * 0.002) * 0.05;
-    
-    ctx.translate(W/2, H/2 + bob + 5);
-    ctx.scale(1 + breath, 1 - breath);
-    
-    // Cuerpo (elipse gorda)
-    var grad = ctx.createRadialGradient(-5, -10, 5, 0, 0, 45);
-    grad.addColorStop(0, '#9B7CC8');
-    grad.addColorStop(1, '#5A3E8A');
-    
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    // Orejas articuladas sutilmente
-    var earWiggle = Math.cos(t * 0.005) * 2;
-    ctx.moveTo(-25 - earWiggle, -35 + earWiggle);
-    ctx.lineTo(-10, -25);
-    ctx.lineTo(10, -25);
-    ctx.lineTo(25 + earWiggle, -35 + earWiggle);
-    ctx.lineTo(35, -5);
-    
-    ctx.arc(0, 0, 40, -Math.PI/6, Math.PI + Math.PI/6, true);
-    ctx.closePath();
-    ctx.fill();
-
-    // Brazos
-    var armSwing = (paused ? 0 : Math.sin(t * 0.008) * 5);
-    ctx.fillStyle = '#6B4AA0';
-    ctx.beginPath();
-    ctx.ellipse(-38, 10 + armSwing, 7, 5, -0.2, 0, Math.PI*2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(38, 10 - armSwing, 7, 5, 0.2, 0, Math.PI*2);
-    ctx.fill();
-
-    // Cara (ojos y sonrisa macabra)
-    // Parpadeo
-    var blink = (Math.random() > 0.98) ? 0.1 : 1;
-    
-    ctx.fillStyle = '#EE2233';
-    ctx.beginPath();
-    ctx.ellipse(-15, -5, 12, 13 * blink, 0, 0, Math.PI*2);
-    ctx.ellipse(15, -5, 12, 13 * blink, 0, 0, Math.PI*2);
-    ctx.fill();
-    
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(-18, -8, 4, 0, Math.PI*2);
-    ctx.arc(12, -8, 4, 0, Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle = '#12062A';
-    ctx.beginPath();
-    ctx.arc(-17, -7, 2, 0, Math.PI*2);
-    ctx.arc(13, -7, 2, 0, Math.PI*2);
-    ctx.fill();
-    
-    // Sonrisa
-    ctx.beginPath();
-    ctx.moveTo(-25, 15);
-    ctx.quadraticCurveTo(0, 35, 25, 15);
-    ctx.quadraticCurveTo(0, 25, -25, 15);
-    ctx.fill();
-
-    ctx.restore();
+    ty = Math.max(10, Math.min(Math.random() * maxH, maxH - H - 10));
   }
 
   var PHRASES = ['Boo! 👻', 'Loading scares...', 'System.out.haunt()', '404 Sleep Not Found'];
@@ -1035,7 +961,9 @@
     bubble.style.left = (bRect.left + W/2) + 'px';
     bubble.style.top = (bRect.top - 10) + 'px';
 
-    drawGengar(now);
+    // El sprite animado original mira hacia la izquierda por defecto
+    img.style.transform = facingLeft ? 'scaleX(1)' : 'scaleX(-1)';
+    
     requestAnimationFrame(loop);
   }
 

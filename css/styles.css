@@ -31,8 +31,8 @@
 }
 
 :root {
-  --paper: #0e0e10;
-  --paper-2: #18181c;
+  --paper: rgba(14, 14, 16, 0.35); /* Transparente para acoplarse al agujero negro */
+  --paper-2: rgba(24, 24, 28, 0.45);
   --paper-glass: rgba(14, 14, 16, .88);
   --ink: #ededf0;
   --ink-2: #888896;
@@ -51,8 +51,8 @@
 }
 
 [data-theme="light"] {
-  --paper: #f4f7ff;
-  --paper-2: #e6edfc;
+  --paper: rgba(244, 247, 255, 0.5);
+  --paper-2: rgba(230, 237, 252, 0.5);
   --paper-glass: rgba(244, 247, 255, .88);
   --ink: #0a2058;
   --ink-2: #3b4f86;
@@ -67,6 +67,12 @@
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Efecto Glassmorphism para acoplar las cajas al fondo espacial */
+.proj, .music-player, .offer__item, .contact-box, .node rect, .nav, .mnav {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
 
 html {
   scroll-behavior: smooth;
@@ -1256,13 +1262,18 @@ main.swap { animation: swap .45s var(--e); }
    ===================================================================== */
 #gengar-buddy {
   position: absolute;
-  z-index: 9999;
+  top: 0;
+  left: 0;
+  z-index: 0; /* Just above the blackhole, but below the text */
   pointer-events: none;
   will-change: left, top, transform;
-  filter: drop-shadow(0 5px 14px rgba(90,30,180,.65));
+  opacity: 0.25;
+  filter: drop-shadow(0 0px 8px rgba(110,60,200,0.2));
 }
 #gengar-bubble {
   position: absolute;
+  top: 0;
+  left: 0;
   z-index: 10000;
   pointer-events: none;
   background: rgba(14,8,28,.93);
