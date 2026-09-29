@@ -77,6 +77,8 @@ const I18N = {
     f_spec_v: "Arquitectura de software y bases de datos relacionales",
     f_goal: "Busco",
     f_goal_v: "Empleo y crecer como desarrollador de sistemas informáticos",
+    f_skills: "Habilidades",
+    f_skills_v: "Python, Java, SQL, JavaScript, HTML, CSS",
     photo_alt: "Foto de Andrey Julian Ricaurte Duran",
 
     /* --- Stack --- */
@@ -271,6 +273,8 @@ const I18N = {
     f_spec_v: "Software architecture and relational databases",
     f_goal: "Looking for",
     f_goal_v: "A job and the chance to grow as a systems developer",
+    f_skills: "Skills",
+    f_skills_v: "Python, Java, SQL, JavaScript, HTML, CSS",
     photo_alt: "Photo of Andrey Julian Ricaurte Duran",
 
     skills_title: "What I work with",

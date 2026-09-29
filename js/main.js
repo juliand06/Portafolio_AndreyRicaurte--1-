@@ -69,21 +69,7 @@
     b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang')); });
   });
 
-  /* ------------------------------ Tema ------------------------------ */
-  var themeMeta = $('meta[name="theme-color"]');
-  function syncThemeColor() {
-    if (themeMeta) themeMeta.setAttribute('content', root.getAttribute('data-theme') === 'light' ? '#f4f7ff' : '#0e0e10');
-  }
-  syncThemeColor();
 
-  $('#themeBtn').addEventListener('click', function () {
-    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.classList.add('theme-anim');
-    root.setAttribute('data-theme', next);
-    store.set('theme', next);
-    setTimeout(function () { root.classList.remove('theme-anim'); }, 650);
-    syncThemeColor();
-  });
 
   /* ------------------------------ Menú móvil ------------------------------ */
   var burger = $('#burger');

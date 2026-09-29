@@ -34,8 +34,8 @@
   --paper: rgba(14, 14, 16, 0.35); /* Transparente para acoplarse al agujero negro */
   --paper-2: rgba(24, 24, 28, 0.45);
   --paper-glass: rgba(14, 14, 16, .88);
-  --ink: #ededf0;
-  --ink-2: #888896;
+  --ink: #ffffff;
+  --ink-2: #c4c4d4;
   --line: rgba(255, 255, 255, .07);
   --line-strong: rgba(255, 255, 255, .16);
   --grid-minor: rgba(255, 255, 255, .015);
@@ -50,20 +50,7 @@
   --nav-h: 64px;
 }
 
-[data-theme="light"] {
-  --paper: rgba(244, 247, 255, 0.5);
-  --paper-2: rgba(230, 237, 252, 0.5);
-  --paper-glass: rgba(244, 247, 255, .88);
-  --ink: #0a2058;
-  --ink-2: #3b4f86;
-  --line: rgba(10, 32, 88, .18);
-  --line-strong: rgba(10, 32, 88, .5);
-  --grid-minor: rgba(10, 32, 88, .05);
-  --grid-major: rgba(10, 32, 88, .1);
-  --signal: #f5a800;
-  --signal-ink: #1a1400;
-  --focus: #0a2058;
-}
+
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
