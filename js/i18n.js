@@ -34,6 +34,8 @@ const I18N = {
     hero_lead: "Diseño la arquitectura, modelo bases de datos relacionales y construyo aplicaciones web y de escritorio.",
     hero_cta_projects: "Ver proyectos",
     hero_cta_cv: "Descargar CV",
+    hero_cta_cv_campus: "CV Campuslands (PDF)",
+    hero_cta_cv_ats: "CV Formal ATS (PDF)",
 
     /* --- Cuadro de rotulación (parte inferior del inicio) --- */
     tb_project: "Proyecto",
@@ -153,6 +155,10 @@ const I18N = {
     c_linkedin: "LinkedIn",
     c_cv: "Currículum",
     c_cv_v: "Descargar CV",
+    c_cv_campus: "CV Campuslands",
+    c_cv_campus_v: "Ver / Descargar PDF",
+    c_cv_ats: "CV Formal (ATS)",
+    c_cv_ats_v: "Ver / Descargar PDF",
 
     /* --- Pie de página --- */
     /* --- Servicios (qué ofrezco) --- */
@@ -234,6 +240,8 @@ const I18N = {
     hero_lead: "I design the architecture, model relational databases and build web and desktop applications.",
     hero_cta_projects: "See projects",
     hero_cta_cv: "Download CV",
+    hero_cta_cv_campus: "Campuslands CV (PDF)",
+    hero_cta_cv_ats: "ATS / Formal CV (PDF)",
 
     tb_project: "Project",
     tb_project_v: "Professional portfolio",
@@ -343,6 +351,10 @@ const I18N = {
     c_linkedin: "LinkedIn",
     c_cv: "Résumé",
     c_cv_v: "Download CV",
+    c_cv_campus: "Campuslands CV",
+    c_cv_campus_v: "View / Download PDF",
+    c_cv_ats: "Formal CV (ATS)",
+    c_cv_ats_v: "View / Download PDF",
 
     nav_offer: "Services",
     offer_title: "What I offer",
